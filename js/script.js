@@ -7,8 +7,9 @@ const demo = document.getElementById("demo");
 	axios
 		.get(url)
 		.then((response) => {
+			let array = response.data.hits;
 			let image = response.data.hits[2].largeImageURL;
-			console.log(image);
+			console.log(array);
 			displayImage(image);
 		})
 		.catch((err) => {
