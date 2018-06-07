@@ -1,16 +1,29 @@
-const fs = require("fs");
+const axios = require("axios");
 const http = require("http");
 
-var server = http.createServer((req, res) => {
-	console.log("request was made: ", req.url);
-	res.writeHead(200, { "Content-Type": "text/html" });
+const url =
+	"https://pixabay.com/api/?key=9220972-14c941a191779d5f50bce3cd4&q=cars&image_type=photo&per_page=3&pretty=true";
 
-	// const file = "<h1>This is a simple HTML code</h1>";
-	fs.readFile("index.html", "utf8", (err, file) => {
-		res.end(file);
+const getPicture = () => {
+	return new Promise((res, rej) => {
+		axios
+			.get(url)
+			.then((response) => {
+				resolve(response.data.hits[0].largeImageURL);
+				// console.log(picture);
+			})
+			.catch((err) => {
+				reject(err);
+			});
 	});
+};
+
+const server = http.createServer((req, res) => {
+	console.log("Request made:", req.url);
+	let image = getPicture();
+	console.log(image);
 });
 
-server.listen(5000, () => {
-	console.log("server running...");
+server.listen(9000, () => {
+	console.log("Server listening on port 9000");
 });
